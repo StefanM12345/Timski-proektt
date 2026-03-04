@@ -1,0 +1,58 @@
+package com.pronajdiusluga.app.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+@Configuration
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http
+                .csrf(csrf -> csrf.disable())
+
+                .authorizeHttpRequests(auth -> auth
+
+                        // јавни страници (сите може да ги гледаат)
+                        .requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**").permitAll()
+
+                        // само USER може
+                        .requestMatchers("/comment/**").hasRole("USER")
+                        .requestMatchers("/apply/**").hasRole("USER")
+
+                        // provider
+                        .requestMatchers("/provider/**").hasRole("SERVICE_PROVIDER")
+
+                        // admin
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        .anyRequest().authenticated()
+                )
+
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
+                )
+
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
+                );
+
+        return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}

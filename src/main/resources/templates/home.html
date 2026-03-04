@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+
+<h1>Pronajdi-Usluga</h1>
+
+<div sec:authorize="isAuthenticated()">
+    Најавен си како: <b sec:authentication="name"></b>
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit">Logout</button>
+    </form>
+</div>
+
+<div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}">Login</a>
+</div>
+
+<hr>
+
+<ul>
+    <li><a th:href="@{/admin}">Admin Dashboard</a></li>
+    <li><a th:href="@{/provider}">Provider Dashboard</a></li>
+    <li><a th:href="@{/user}">User Dashboard</a></li>
+</ul>
+
+<p>
+    Ако немаш право за некоја страна, ќе добиеш 403.
+</p>
+
+</body>
+</html>

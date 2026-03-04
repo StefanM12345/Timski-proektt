@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="mk"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <title>Локален пребарувач на услуги</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 24px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .sub {
+            color: #666;
+            margin-bottom: 18px;
+        }
+
+        form {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: end;
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: grid;
+            gap: 6px;
+            font-size: 14px;
+        }
+
+        select,input {
+            padding: 8px;
+            min-width: 220px;
+        }
+
+        button {
+            padding: 9px 14px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        th,td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #f5f5f5;
+        }
+
+        .muted {
+            color: #777;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border: 1px solid #ddd;
+            border-radius: 999px;
+            font-size: 12px;
+        }
+
+        .empty {
+            padding: 14px;
+            background: #fafafa;
+            border: 1px dashed #ccc;
+            margin-top: 12px;
+        }
+
+        .comment-box{
+            margin-top:10px;
+            padding:10px;
+            background:#f7f7f7;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>Локален пребарувач на услуги</h1>
+
+<div class="sub">
+    Пребарај услуги по град, категорија или име (keyword).
+</div>
+
+<!-- LOGIN STATUS -->
+
+<div sec:authorize="isAuthenticated()">
+
+    Најавен си како:
+    <b sec:authentication="name"></b>
+
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit">Logout</button>
+    </form>
+
+</div>
+
+<div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}">Login</a>
+</div>
+
+<!-- SEARCH -->
+
+<form method="get" action="/">
+
+    <label>
+        Град
+
+        <select name="city">
+
+            <option value="">-- Сите --</option>
+
+            <option th:each="c : ${cities}"
+                    th:value="${c.name}"
+                    th:text="${c.name}"
+                    th:selected="${city != null and city == c.name}">
+            </option>
+
+        </select>
+
+    </label>
+
+    <label>
+        Категорија
+
+        <select name="category">
+
+            <option value="">-- Сите --</option>
+
+            <option th:each="cat : ${categories}"
+                    th:value="${cat.name}"
+                    th:text="${cat.name}"
+                    th:selected="${category != null and category == cat.name}">
+            </option>
+
+        </select>
+
+    </label>
+
+    <label>
+
+        Пребарување (име)
+
+        <input type="text"
+               name="q"
+               placeholder="пр. auto, barber..."
+               th:value="${q}">
+
+    </label>
+
+    <button type="submit">Пребарај</button>
+
+    <a href="/" class="muted" style="padding:9px 0;">Ресет</a>
+
+</form>
+
+<div class="muted">
+
+    Резултати:
+    <b th:text="${#lists.size(providers)}">0</b>
+
+</div>
+
+<div th:if="${#lists.isEmpty(providers)}" class="empty">
+
+    Нема резултати. Пробај друг град/категорија или keyword.
+
+</div>
+
+<!-- TABLE -->
+
+<table th:if="${!#lists.isEmpty(providers)}">
+
+    <thead>
+
+    <tr>
+
+        <th>Име</th>
+        <th>Категорија</th>
+        <th>Град</th>
+        <th>Адреса</th>
+        <th>Телефон</th>
+        <th>Опис</th>
+        <th>Акции</th>
+
+    </tr>
+
+    </thead>
+
+    <tbody>
+
+    <tr th:each="p : ${providers}">
+
+        <td>
+
+            <span th:text="${p.name}">Auto Ivan</span>
+            <span class="pill" th:text="'#' + ${p.id}">#1</span>
+
+        </td>
+
+        <td th:text="${p.category.name}"></td>
+
+        <td th:text="${p.city.name}"></td>
+
+        <td th:text="${p.address}"></td>
+
+        <td th:text="${p.phone}"></td>
+
+        <td th:text="${p.description}"></td>
+
+        <td>
+
+            <!-- APPLY -->
+
+            <div sec:authorize="hasRole('USER')">
+
+                <form th:action="@{/apply/{id}(id=${p.id})}" method="post">
+
+                    <button type="submit">Пријави се</button>
+
+                </form>
+
+            </div>
+
+            <!-- COMMENT -->
+
+            <div sec:authorize="hasRole('USER')" class="comment-box">
+
+                <form th:action="@{/comment}" method="post">
+
+                    <input type="hidden" name="providerId" th:value="${p.id}"/>
+
+                    <input type="text"
+                           name="text"
+                           placeholder="Напиши коментар..."/>
+
+                    <button type="submit">Коментар</button>
+
+                </form>
+
+            </div>
+
+        </td>
+
+    </tr>
+
+    </tbody>
+
+</table>
+
+<hr style="margin: 24px 0;">
+
+<div class="muted">
+
+    API тест:
+
+    <code>GET /api/providers/search</code>
+
+    <span>•</span>
+
+    <code>GET /api/providers/search?city=Скопје</code>
+
+</div>
+
+</body>
+</html>
