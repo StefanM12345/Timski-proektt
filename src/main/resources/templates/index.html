@@ -12,83 +12,167 @@
 
     <style>
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 24px;
+        body{
+            font-family:Arial;
+            margin:0;
+            background:#f4f6fb;
         }
 
-        h1 {
-            margin-bottom: 8px;
+        /* HEADER */
+
+        .header{
+            background:linear-gradient(135deg,#4facfe,#00f2fe);
+            color:white;
+            padding:20px 30px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
         }
 
-        .sub {
-            color: #666;
-            margin-bottom: 18px;
+        .header h1{
+            margin:0;
+            font-size:24px;
         }
 
-        form {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            align-items: end;
-            margin-bottom: 18px;
+        .user-box{
+            display:flex;
+            align-items:center;
+            gap:10px;
         }
 
-        label {
-            display: grid;
-            gap: 6px;
-            font-size: 14px;
+        .username{
+            background:rgba(255,255,255,0.2);
+            padding:6px 12px;
+            border-radius:20px;
         }
 
-        select,input {
-            padding: 8px;
-            min-width: 220px;
+        .logout-btn{
+            background:white;
+            color:#4facfe;
+            border:none;
+            padding:6px 12px;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:bold;
         }
 
-        button {
-            padding: 9px 14px;
-            cursor: pointer;
+        .logout-btn:hover{
+            background:#eee;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px;
+        /* MAIN CONTAINER */
+
+        .container{
+            padding:30px;
+            max-width:1200px;
+            margin:auto;
         }
 
-        th,td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
+        /* SEARCH CARD */
+
+        .search-card{
+            background:white;
+            padding:20px;
+            border-radius:12px;
+            box-shadow:0 8px 20px rgba(0,0,0,0.08);
+            margin-bottom:20px;
         }
 
-        th {
-            background: #f5f5f5;
+        form{
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+            align-items:end;
         }
 
-        .muted {
-            color: #777;
+        label{
+            display:grid;
+            gap:6px;
+            font-size:14px;
         }
 
-        .pill {
-            display: inline-block;
-            padding: 2px 8px;
-            border: 1px solid #ddd;
-            border-radius: 999px;
-            font-size: 12px;
+        select,input{
+            padding:9px;
+            border-radius:6px;
+            border:1px solid #ccc;
+            min-width:200px;
         }
 
-        .empty {
-            padding: 14px;
-            background: #fafafa;
-            border: 1px dashed #ccc;
-            margin-top: 12px;
+        button{
+            padding:10px 16px;
+            border:none;
+            background:#4facfe;
+            color:white;
+            border-radius:6px;
+            cursor:pointer;
         }
+
+        button:hover{
+            background:#3b8de3;
+        }
+
+        /* TABLE */
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:white;
+            border-radius:12px;
+            overflow:hidden;
+            box-shadow:0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        th,td{
+            padding:12px;
+            border-bottom:1px solid #eee;
+        }
+
+        th{
+            background:#f3f5f9;
+            text-align:left;
+        }
+
+        tr:hover{
+            background:#fafafa;
+        }
+
+        /* BADGE */
+
+        .pill{
+            background:#eaf4ff;
+            color:#4facfe;
+            padding:3px 10px;
+            border-radius:20px;
+            font-size:12px;
+            margin-left:6px;
+        }
+
+        /* COMMENT BOX */
 
         .comment-box{
+            margin-top:8px;
+            display:flex;
+            gap:6px;
+        }
+
+        .comment-box input{
+            flex:1;
+        }
+
+        /* EMPTY */
+
+        .empty{
+            padding:20px;
+            background:white;
+            border-radius:10px;
+            margin-top:15px;
+            text-align:center;
+            box-shadow:0 6px 15px rgba(0,0,0,0.05);
+        }
+
+        .muted{
+            color:#777;
             margin-top:10px;
-            padding:10px;
-            background:#f7f7f7;
         }
 
     </style>
@@ -97,189 +181,158 @@
 
 <body>
 
-<h1>Локален пребарувач на услуги</h1>
+<!-- HEADER -->
 
-<div class="sub">
-    Пребарај услуги по град, категорија или име (keyword).
-</div>
+<div class="header">
 
-<!-- LOGIN STATUS -->
+    <h1>Локален пребарувач на услуги</h1>
 
-<div sec:authorize="isAuthenticated()">
+    <div class="user-box">
 
-    Најавен си како:
-    <b sec:authentication="name"></b>
+        <div sec:authorize="isAuthenticated()">
 
-    <form th:action="@{/logout}" method="post" style="display:inline;">
-        <button type="submit">Logout</button>
-    </form>
+<span class="username">
+👤 <span sec:authentication="name"></span>
+</span>
 
-</div>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button class="logout-btn">Logout</button>
+            </form>
 
-<div sec:authorize="!isAuthenticated()">
-    <a th:href="@{/login}">Login</a>
-</div>
+        </div>
 
-<!-- SEARCH -->
+        <div sec:authorize="!isAuthenticated()">
+            <a th:href="@{/login}" style="color:white;">Login</a>
+        </div>
 
-<form method="get" action="/">
-
-    <label>
-        Град
-
-        <select name="city">
-
-            <option value="">-- Сите --</option>
-
-            <option th:each="c : ${cities}"
-                    th:value="${c.name}"
-                    th:text="${c.name}"
-                    th:selected="${city != null and city == c.name}">
-            </option>
-
-        </select>
-
-    </label>
-
-    <label>
-        Категорија
-
-        <select name="category">
-
-            <option value="">-- Сите --</option>
-
-            <option th:each="cat : ${categories}"
-                    th:value="${cat.name}"
-                    th:text="${cat.name}"
-                    th:selected="${category != null and category == cat.name}">
-            </option>
-
-        </select>
-
-    </label>
-
-    <label>
-
-        Пребарување (име)
-
-        <input type="text"
-               name="q"
-               placeholder="пр. auto, barber..."
-               th:value="${q}">
-
-    </label>
-
-    <button type="submit">Пребарај</button>
-
-    <a href="/" class="muted" style="padding:9px 0;">Ресет</a>
-
-</form>
-
-<div class="muted">
-
-    Резултати:
-    <b th:text="${#lists.size(providers)}">0</b>
+    </div>
 
 </div>
 
-<div th:if="${#lists.isEmpty(providers)}" class="empty">
+<!-- MAIN -->
 
-    Нема резултати. Пробај друг град/категорија или keyword.
+<div class="container">
 
-</div>
+    <div class="search-card">
 
-<!-- TABLE -->
+        <div class="muted">
+            Пребарај услуги по град, категорија или име.
+        </div>
 
-<table th:if="${!#lists.isEmpty(providers)}">
+        <form method="get" action="/">
 
-    <thead>
+            <label>
+                Град
+                <select name="city">
+                    <option value="">-- Сите --</option>
 
-    <tr>
+                    <option th:each="c : ${cities}"
+                            th:value="${c.name}"
+                            th:text="${c.name}"
+                            th:selected="${city != null and city == c.name}">
+                    </option>
 
-        <th>Име</th>
-        <th>Категорија</th>
-        <th>Град</th>
-        <th>Адреса</th>
-        <th>Телефон</th>
-        <th>Опис</th>
-        <th>Акции</th>
+                </select>
+            </label>
 
-    </tr>
+            <label>
+                Категорија
+                <select name="category">
+                    <option value="">-- Сите --</option>
 
-    </thead>
+                    <option th:each="cat : ${categories}"
+                            th:value="${cat.name}"
+                            th:text="${cat.name}"
+                            th:selected="${category != null and category == cat.name}">
+                    </option>
 
-    <tbody>
+                </select>
+            </label>
 
-    <tr th:each="p : ${providers}">
+            <label>
+                Пребарување
+                <input type="text"
+                       name="q"
+                       placeholder="auto, barber..."
+                       th:value="${q}">
+            </label>
 
-        <td>
+            <button type="submit">Пребарај</button>
 
-            <span th:text="${p.name}">Auto Ivan</span>
-            <span class="pill" th:text="'#' + ${p.id}">#1</span>
+        </form>
 
-        </td>
+    </div>
 
-        <td th:text="${p.category.name}"></td>
+    <div class="muted">
+        Резултати: <b th:text="${#lists.size(providers)}">0</b>
+    </div>
 
-        <td th:text="${p.city.name}"></td>
+    <div th:if="${#lists.isEmpty(providers)}" class="empty">
+        Нема резултати.
+    </div>
 
-        <td th:text="${p.address}"></td>
+    <table th:if="${!#lists.isEmpty(providers)}">
 
-        <td th:text="${p.phone}"></td>
+        <thead>
+        <tr>
+            <th>Име</th>
+            <th>Категорија</th>
+            <th>Град</th>
+            <th>Адреса</th>
+            <th>Телефон</th>
+            <th>Опис</th>
+            <th>Акции</th>
+        </tr>
+        </thead>
 
-        <td th:text="${p.description}"></td>
+        <tbody>
 
-        <td>
+        <tr th:each="p : ${providers}">
 
-            <!-- APPLY -->
+            <td>
+                <span th:text="${p.name}"></span>
+                <span class="pill" th:text="'#'+${p.id}"></span>
+            </td>
 
-            <div sec:authorize="hasRole('USER')">
+            <td th:text="${p.category.name}"></td>
+            <td th:text="${p.city.name}"></td>
+            <td th:text="${p.address}"></td>
+            <td th:text="${p.phone}"></td>
+            <td th:text="${p.description}"></td>
 
-                <form th:action="@{/apply/{id}(id=${p.id})}" method="post">
+            <td>
 
-                    <button type="submit">Пријави се</button>
+                <div sec:authorize="hasRole('USER')">
 
-                </form>
+                    <form th:action="@{/apply/{id}(id=${p.id})}" method="post">
+                        <button>Пријави се</button>
+                    </form>
 
-            </div>
+                </div>
 
-            <!-- COMMENT -->
+                <div sec:authorize="hasRole('USER')" class="comment-box">
 
-            <div sec:authorize="hasRole('USER')" class="comment-box">
+                    <form th:action="@{/comment}" method="post">
 
-                <form th:action="@{/comment}" method="post">
+                        <input type="hidden" name="providerId" th:value="${p.id}"/>
 
-                    <input type="hidden" name="providerId" th:value="${p.id}"/>
+                        <input type="text"
+                               name="text"
+                               placeholder="Коментар..."/>
 
-                    <input type="text"
-                           name="text"
-                           placeholder="Напиши коментар..."/>
+                        <button>💬</button>
 
-                    <button type="submit">Коментар</button>
+                    </form>
 
-                </form>
+                </div>
 
-            </div>
+            </td>
 
-        </td>
+        </tr>
 
-    </tr>
+        </tbody>
 
-    </tbody>
-
-</table>
-
-<hr style="margin: 24px 0;">
-
-<div class="muted">
-
-    API тест:
-
-    <code>GET /api/providers/search</code>
-
-    <span>•</span>
-
-    <code>GET /api/providers/search?city=Скопје</code>
+    </table>
 
 </div>
 

@@ -3,26 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+
+    <style>
+
+        body{
+            margin:0;
+            font-family: Arial, sans-serif;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(-45deg,#4facfe,#00f2fe,#43e97b,#38f9d7);
+            background-size:400% 400%;
+            animation: gradientBG 10s ease infinite;
+        }
+
+        /* background animation */
+        @keyframes gradientBG{
+            0%{background-position:0% 50%;}
+            50%{background-position:100% 50%;}
+            100%{background-position:0% 50%;}
+        }
+
+        .login-container{
+            background:white;
+            padding:40px;
+            border-radius:15px;
+            width:320px;
+            box-shadow:0 15px 40px rgba(0,0,0,0.25);
+            text-align:center;
+            animation: fadeIn 1s ease;
+        }
+
+        /* form animation */
+        @keyframes fadeIn{
+            from{
+                opacity:0;
+                transform:translateY(30px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        h2{
+            margin-bottom:25px;
+        }
+
+        .input-group{
+            position:relative;
+            margin-bottom:20px;
+        }
+
+        input{
+            width:100%;
+            padding:12px;
+            border-radius:8px;
+            border:1px solid #ccc;
+            outline:none;
+            font-size:14px;
+        }
+
+        /* floating label */
+        label{
+            position:absolute;
+            left:12px;
+            top:12px;
+            color:#777;
+            font-size:14px;
+            transition:0.3s;
+            background:white;
+            padding:0 5px;
+        }
+
+        input:focus + label,
+        input:not(:placeholder-shown) + label{
+            top:-8px;
+            font-size:11px;
+            color:#4facfe;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            border:none;
+            border-radius:8px;
+            background:#4facfe;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        button:hover{
+            transform:scale(1.05);
+            background:#3a8ee6;
+        }
+
+        .error{
+            color:red;
+            margin-bottom:10px;
+        }
+
+        .success{
+            color:green;
+            margin-bottom:10px;
+        }
+
+    </style>
 </head>
+
 <body>
-<h2>Login</h2>
 
-<div th:if="${param.error}">
-    <p style="color:red;">Грешен username/password</p>
-</div>
-<div th:if="${param.logout}">
-    <p style="color:green;">Одјавен си.</p>
-</div>
+<div class="login-container">
 
-<form method="post" th:action="@{/login}">
-    <div>
-        <input type="text" name="username" placeholder="Username" required>
+    <h2>Login</h2>
+
+    <div th:if="${param.error}" class="error">
+        Грешен username/password
     </div>
-    <div>
-        <input type="password" name="password" placeholder="Password" required>
+
+    <div th:if="${param.logout}" class="success">
+        Одјавен си.
     </div>
-    <button type="submit">Login</button>
-</form>
+
+    <form method="post" th:action="@{/login}">
+
+        <div class="input-group">
+            <input type="text" name="username" placeholder=" " required>
+            <label>Username</label>
+        </div>
+
+        <div class="input-group">
+            <input type="password" name="password" placeholder=" " required>
+            <label>Password</label>
+        </div>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+</div>
 
 </body>
 </html>
