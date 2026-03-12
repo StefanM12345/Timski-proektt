@@ -2,89 +2,117 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Provider</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Моја услуга – НајдиУслуга</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        body{
-            margin:0;
-            font-family: Arial, sans-serif;
-            height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            background: linear-gradient(-45deg,#4facfe,#00f2fe,#43e97b,#38f9d7);
-            background-size:400% 400%;
-            animation: gradientBG 10s ease infinite;
-        }
-        @keyframes gradientBG{
-            0%{background-position:0% 50%;}
-            50%{background-position:100% 50%;}
-            100%{background-position:0% 50%;}
-        }
-        .container{
-            background:white;
-            padding:30px;
-            border-radius:15px;
-            width:500px;
-            box-shadow:0 15px 40px rgba(0,0,0,0.25);
-        }
-        h2{
-            margin-top:0;
-            text-align:center;
-        }
-        .actions button{
-            padding:8px 12px;
-            border:none;
-            border-radius:6px;
-            cursor:pointer;
-            margin-right:5px;
-        }
-        .edit-btn{
-            background:#4facfe;
-            color:white;
-        }
-        .delete-btn{
-            background:#f44336;
-            color:white;
-        }
-        a.link{
-            color:#4facfe;
-            text-decoration:none;
-        }
+        :root { --primary: #4facfe; --gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8fafc; min-height: 100vh; }
+        .dashboard-hero { background: var(--gradient); padding: 2rem 0; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(79,172,254,0.2); }
+        .service-card { border: none; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); overflow: hidden; }
+        .service-card .list-group-item { border-left: none; border-right: none; padding: 1rem 1.25rem; }
+        .service-card .list-group-item:first-child { border-top: none; }
+        .info-label { color: #64748b; font-size: 0.875rem; }
+        .info-value { font-weight: 600; color: #1e293b; }
+        .btn-edit { background: var(--gradient); border: none; color: white; font-weight: 600; }
+        .btn-edit:hover { opacity: 0.95; color: white; }
+        .btn-delete { background: #dc3545; border: none; color: white; font-weight: 600; }
+        .btn-delete:hover { background: #bb2d3b; color: white; }
+        .empty-state { border: 2px dashed #e2e8f0; border-radius: 16px; padding: 3rem 2rem; text-align: center; }
+        .btn-create { background: var(--gradient); border: none; color: white; font-weight: 600; padding: 0.6rem 1.5rem; border-radius: 10px; }
+        .btn-create:hover { opacity: 0.95; color: white; }
+        .btn-back { color: var(--primary); text-decoration: none; font-weight: 500; }
+        .btn-back:hover { color: #3b8de3; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>SERVICE PROVIDER DASHBOARD</h2>
-    <p>Ова го гледа само SERVICE_PROVIDER</p>
 
-    <div th:if="${provider != null}">
-        <h3>Моја услуга</h3>
-        <p><b>Име:</b> <span th:text="${provider.name}"></span></p>
-        <p><b>Опис:</b> <span th:text="${provider.description}"></span></p>
-        <p><b>Град:</b> <span th:text="${provider.city.name}"></span></p>
-        <p><b>Категорија:</b> <span th:text="${provider.category.name}"></span></p>
-        <p><b>Адреса:</b> <span th:text="${provider.address}"></span></p>
-        <p><b>Телефон:</b> <span th:text="${provider.phone}"></span></p>
-
-        <div class="actions">
-            <form th:action="@{/provider/edit}" method="get" style="display:inline;">
-                <button type="submit" class="edit-btn">Уреди</button>
-            </form>
-            <form th:action="@{/provider/delete}" method="post" style="display:inline;"
-                  onsubmit="return confirm('Дали си сигурен дека сакаш да ја избришеш услугата?');">
-                <button type="submit" class="delete-btn">Избриши</button>
-            </form>
+<!-- Hero -->
+<div class="dashboard-hero">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3">
+            <div class="rounded-circle bg-white bg-opacity-25 p-3">
+                <i class="bi bi-briefcase-fill text-white fs-3"></i>
+            </div>
+            <div>
+                <h1 class="h4 mb-1 text-white fw-bold">Моја услуга</h1>
+                <span class="text-white-50 small">Ова го гледа само SERVICE_PROVIDER</span>
+            </div>
         </div>
     </div>
-
-    <div th:if="${provider == null}">
-        <p>Немаш креирано оглас.</p>
-        <p>
-            <a th:href="@{/provider/create}" class="link">Креирај го твојот оглас</a>
-        </p>
-    </div>
-
-    <p><a th:href="@{/}" class="link">← Назад кон почетна</a></p>
 </div>
+
+<main class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 col-xl-6">
+            <!-- With provider -->
+            <div th:if="${provider != null}">
+                <div class="card service-card mb-4">
+                    <div class="card-header bg-transparent border-bottom py-3">
+                        <i class="bi bi-shop me-2"></i><span th:text="${provider.name}">услуга</span>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="info-label">Име</span>
+                            <span class="info-value" th:text="${provider.name}"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="info-label">Опис</span>
+                            <span th:text="${provider.description != null ? provider.description : '—'}"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="info-label">Град</span>
+                            <span class="info-value" th:text="${provider.city.name}"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="info-label">Категорија</span>
+                            <span class="info-value" th:text="${provider.category.name}"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="info-label">Адреса</span>
+                            <span th:text="${provider.address}"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="info-label">Телефон</span>
+                            <span th:text="${provider.phone}"></span>
+                        </li>
+                    </ul>
+                    <div class="card-body d-flex flex-wrap gap-2">
+                        <form th:action="@{/provider/edit}" method="get" class="mb-0">
+                            <button type="submit" class="btn btn-edit btn-sm">
+                                <i class="bi bi-pencil me-1"></i>Уреди
+                            </button>
+                        </form>
+                        <form th:action="@{/provider/delete}" method="post" class="mb-0"
+                              onsubmit="return confirm('Дали си сигурен дека сакаш да ја избришеш услугата?');">
+                            <button type="submit" class="btn btn-delete btn-sm">
+                                <i class="bi bi-trash me-1"></i>Избриши
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No provider -->
+            <div th:if="${provider == null}" class="empty-state mb-4">
+                <i class="bi bi-briefcase display-4 text-muted mb-3"></i>
+                <p class="text-muted mb-4">Немаш креирано оглас.</p>
+                <a th:href="@{/provider/create}" class="btn btn-create">
+                    <i class="bi bi-plus-circle me-2"></i>Креирај го твојот оглас
+                </a>
+            </div>
+
+            <!-- Back link -->
+            <div class="text-center">
+                <a th:href="@{/}" class="btn-back">
+                    <i class="bi bi-arrow-left me-2"></i>Назад кон почетна
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

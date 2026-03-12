@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Мој профил – НајдиУслуга</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --primary: #4facfe; --gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8fafc; min-height: 100vh; }
+        .profile-hero { background: var(--gradient); padding: 2rem 0; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(79,172,254,0.2); }
+        .profile-avatar { width: 80px; height: 80px; background: rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+        .info-card { border: none; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); overflow: hidden; }
+        .info-card .list-group-item { border-left: none; border-right: none; padding: 1rem 1.25rem; }
+        .info-card .list-group-item:first-child { border-top: none; }
+        .info-label { color: #64748b; font-size: 0.875rem; }
+        .info-value { font-weight: 600; color: #1e293b; }
+        .role-badge { padding: 0.35rem 0.85rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; }
+        .role-USER { background: #dbeafe; color: #1d4ed8; }
+        .role-SERVICE_PROVIDER { background: #dcfce7; color: #15803d; }
+        .role-ADMIN { background: #fee2e2; color: #b91c1c; }
+        .provider-card { border: none; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border-left: 4px solid #22c55e; }
+        .provider-card .card-header { background: transparent; border-bottom: 1px solid #e2e8f0; font-weight: 600; color: #22c55e; padding: 1rem 1.25rem; }
+        .provider-detail { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0; }
+        .provider-detail i { color: #64748b; width: 20px; }
+        .btn-provider { background: var(--gradient); border: none; color: white; font-weight: 600; padding: 0.5rem 1.25rem; border-radius: 10px; }
+        .btn-provider:hover { opacity: 0.95; color: white; }
+        .btn-back { color: var(--primary); text-decoration: none; font-weight: 500; }
+        .btn-back:hover { color: #3b8de3; }
+    </style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="profile-hero">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3">
+            <div class="profile-avatar">
+                <i class="bi bi-person-fill text-white"></i>
+            </div>
+            <div>
+                <h1 class="h4 mb-1 text-white fw-bold" th:text="${user.username}">username</h1>
+                <span th:class="'role-badge role-' + ${user.role.name()}" th:switch="${user.role.name()}">
+                    <span th:case="'USER'">Корисник</span>
+                    <span th:case="'SERVICE_PROVIDER'">Давач на услуги</span>
+                    <span th:case="'ADMIN'">Администратор</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 col-xl-6">
+            <!-- Account info -->
+            <div class="card info-card mb-4">
+                <div class="card-header bg-transparent border-bottom py-3">
+                    <i class="bi bi-person-gear me-2"></i>Податоци за акаунт
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="info-label">Корисничко име</span>
+                        <span class="info-value" th:text="${user.username}">username</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="info-label">Улога</span>
+                        <span th:class="'role-badge role-' + ${user.role.name()}" th:switch="${user.role.name()}">
+                            <span th:case="'USER'">Корисник</span>
+                            <span th:case="'SERVICE_PROVIDER'">Давач на услуги</span>
+                            <span th:case="'ADMIN'">Администратор</span>
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="info-label">Лозинка</span>
+                        <span class="text-muted small">•••••••• (за безбедност не се прикажува)</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="info-label">ID на акаунт</span>
+                        <span class="info-value" th:text="${user.id}">id</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Provider section -->
+            <div th:if="${provider != null}" class="card provider-card mb-4">
+                <div class="card-header">
+                    <i class="bi bi-briefcase me-2"></i>Информации за давач на услуги
+                </div>
+                <div class="card-body">
+                    <div class="provider-detail">
+                        <i class="bi bi-shop"></i>
+                        <span><strong>Име на услуга:</strong> <span th:text="${provider.name}"></span></span>
+                    </div>
+                    <div class="provider-detail">
+                        <i class="bi bi-geo-alt"></i>
+                        <span><strong>Град:</strong> <span th:text="${provider.city.name}"></span></span>
+                    </div>
+                    <div class="provider-detail">
+                        <i class="bi bi-tag"></i>
+                        <span><strong>Категорија:</strong> <span th:text="${provider.category.name}"></span></span>
+                    </div>
+                    <div class="provider-detail">
+                        <i class="bi bi-telephone"></i>
+                        <span><strong>Телефон:</strong> <span th:text="${provider.phone}"></span></span>
+                    </div>
+                    <div class="provider-detail">
+                        <i class="bi bi-pin-map"></i>
+                        <span><strong>Адреса:</strong> <span th:text="${provider.address}"></span></span>
+                    </div>
+                    <a th:href="@{/provider}" class="btn btn-provider mt-3">
+                        <i class="bi bi-arrow-right-circle me-2"></i>Отиди на профилот на давач
+                    </a>
+                </div>
+            </div>
+
+            <!-- No provider yet -->
+            <div th:if="${user.role.name() == 'SERVICE_PROVIDER' and provider == null}" class="card provider-card mb-4">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-briefcase display-4 text-muted mb-3"></i>
+                    <p class="text-muted mb-3">Немаш креирано оглас како давач.</p>
+                    <a th:href="@{/provider/create}" class="btn btn-provider">Креирај оглас</a>
+                </div>
+            </div>
+
+            <!-- Back link -->
+            <div class="text-center">
+                <a th:href="@{/}" class="btn-back">
+                    <i class="bi bi-arrow-left me-2"></i>Назад кон почетна
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

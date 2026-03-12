@@ -43,7 +43,7 @@ public class ProviderRequestController {
         if (!model.containsAttribute("providerRequestForm")) {
             model.addAttribute("providerRequestForm", new ProviderRequestForm());
         }
-        model.addAttribute("cities", cityRepository.findAll());
+        model.addAttribute("cities", cityRepository.findAllByOrderByNameAsc());
         model.addAttribute("categories", categoryRepository.findAll());
         return "provider-request";
     }
@@ -91,7 +91,7 @@ public class ProviderRequestController {
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("cities", cityRepository.findAll());
+            model.addAttribute("cities", cityRepository.findAllByOrderByNameAsc());
             model.addAttribute("categories", categoryRepository.findAll());
             return "provider-request";
         }
