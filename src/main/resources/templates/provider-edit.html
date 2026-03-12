@@ -28,7 +28,7 @@
                     <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Уреди ја твојата услуга</h5>
                 </div>
                 <div class="card-body p-4">
-                    <form th:action="@{/provider/edit}" method="post" th:object="${provider}">
+                    <form th:action="@{/provider/edit/{id}(id=${provider.id})}" method="post" th:object="${provider}">
                         <div class="mb-3">
                             <label class="form-label fw-medium">Име</label>
                             <input type="text" th:field="*{name}" class="form-control" required/>

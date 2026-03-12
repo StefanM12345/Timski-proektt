@@ -22,8 +22,8 @@ public interface ServiceProviderRepository extends JpaRepository<ServiceProvider
     // Пребарување по keyword во име (contains)
     List<ServiceProvider> findByNameContainingIgnoreCase(String keyword);
 
-    // Провајдер по user
-    ServiceProvider findByUser(User user);
+    // Сите провајдери на еден user (еден user може да има повеќе огласи)
+    List<ServiceProvider> findAllByUserOrderByIdDesc(User user);
 
     List<ServiceProvider> findByCity(city city);
 

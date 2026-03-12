@@ -74,6 +74,11 @@
                 <li sec:authorize="hasRole('ADMIN')" class="nav-item">
                     <a th:href="@{/admin}" class="btn btn-provider btn-sm" style="color:#dc3545;">Барања за давачи</a>
                 </li>
+                <li sec:authorize="hasRole('SERVICE_PROVIDER')" class="nav-item">
+                    <a th:href="@{/provider/create}" class="btn btn-provider btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i>Креирај оглас
+                    </a>
+                </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <form th:action="@{/logout}" method="post" class="d-inline">
                         <button type="submit" class="btn btn-logout btn-sm">Logout</button>

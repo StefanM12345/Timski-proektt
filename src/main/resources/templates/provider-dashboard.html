@@ -36,7 +36,7 @@
                 <i class="bi bi-briefcase-fill text-white fs-3"></i>
             </div>
             <div>
-                <h1 class="h4 mb-1 text-white fw-bold">Моја услуга</h1>
+                <h1 class="h4 mb-1 text-white fw-bold">Мои огласи</h1>
                 <span class="text-white-50 small">Ова го гледа само SERVICE_PROVIDER</span>
             </div>
         </div>
@@ -46,45 +46,43 @@
 <main class="container pb-5">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8 col-xl-6">
-            <!-- With provider -->
-            <div th:if="${provider != null}">
-                <div class="card service-card mb-4">
+            <!-- List of providers -->
+            <div th:each="p : ${providers}" class="mb-4">
+                <div class="card service-card">
                     <div class="card-header bg-transparent border-bottom py-3">
-                        <i class="bi bi-shop me-2"></i><span th:text="${provider.name}">услуга</span>
+                        <i class="bi bi-shop me-2"></i><span th:text="${p.name}">услуга</span>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="info-label">Име</span>
-                            <span class="info-value" th:text="${provider.name}"></span>
+                            <span class="info-value" th:text="${p.name}"></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="info-label">Опис</span>
-                            <span th:text="${provider.description != null ? provider.description : '—'}"></span>
+                            <span th:text="${p.description != null ? p.description : '—'}"></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="info-label">Град</span>
-                            <span class="info-value" th:text="${provider.city.name}"></span>
+                            <span class="info-value" th:text="${p.city.name}"></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="info-label">Категорија</span>
-                            <span class="info-value" th:text="${provider.category.name}"></span>
+                            <span class="info-value" th:text="${p.category.name}"></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="info-label">Адреса</span>
-                            <span th:text="${provider.address}"></span>
+                            <span th:text="${p.address}"></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="info-label">Телефон</span>
-                            <span th:text="${provider.phone}"></span>
+                            <span th:text="${p.phone}"></span>
                         </li>
                     </ul>
                     <div class="card-body d-flex flex-wrap gap-2">
-                        <form th:action="@{/provider/edit}" method="get" class="mb-0">
-                            <button type="submit" class="btn btn-edit btn-sm">
-                                <i class="bi bi-pencil me-1"></i>Уреди
-                            </button>
-                        </form>
-                        <form th:action="@{/provider/delete}" method="post" class="mb-0"
+                        <a th:href="@{/provider/edit/{id}(id=${p.id})}" class="btn btn-edit btn-sm text-decoration-none">
+                            <i class="bi bi-pencil me-1"></i>Уреди
+                        </a>
+                        <form th:action="@{/provider/delete/{id}(id=${p.id})}" method="post" class="mb-0"
                               onsubmit="return confirm('Дали си сигурен дека сакаш да ја избришеш услугата?');">
                             <button type="submit" class="btn btn-delete btn-sm">
                                 <i class="bi bi-trash me-1"></i>Избриши
@@ -94,12 +92,19 @@
                 </div>
             </div>
 
-            <!-- No provider -->
-            <div th:if="${provider == null}" class="empty-state mb-4">
+            <!-- No providers -->
+            <div th:if="${#lists.isEmpty(providers)}" class="empty-state mb-4">
                 <i class="bi bi-briefcase display-4 text-muted mb-3"></i>
                 <p class="text-muted mb-4">Немаш креирано оглас.</p>
                 <a th:href="@{/provider/create}" class="btn btn-create">
                     <i class="bi bi-plus-circle me-2"></i>Креирај го твојот оглас
+                </a>
+            </div>
+
+            <!-- Add new ad button (when they have at least one) -->
+            <div th:if="${!#lists.isEmpty(providers)}" class="text-center mb-4">
+                <a th:href="@{/provider/create}" class="btn btn-create">
+                    <i class="bi bi-plus-circle me-2"></i>Креирај нов оглас
                 </a>
             </div>
 

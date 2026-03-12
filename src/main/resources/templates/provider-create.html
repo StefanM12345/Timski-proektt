@@ -25,25 +25,26 @@
         <div class="col-12 col-md-10 col-lg-6">
             <div class="card form-card">
                 <div class="card-header bg-transparent border-bottom py-3">
-                    <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Креирај го твојот оглас</h5>
+                    <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Креирај нов оглас</h5>
+                    <p class="mb-0 mt-1 small text-muted">Внеси нови податоци за твојот оглас (празни полиња)</p>
                 </div>
                 <div class="card-body p-4">
-                    <form th:action="@{/provider/create}" method="post">
+                    <form th:action="@{/provider/create}" method="post" autocomplete="off">
                         <div class="mb-3">
                             <label class="form-label fw-medium">Име на бизнис / услуга</label>
-                            <input type="text" name="name" class="form-control" required/>
+                            <input type="text" name="name" class="form-control" placeholder="Внеси име..." required autocomplete="off"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-medium">Опис</label>
-                            <input type="text" name="description" class="form-control"/>
+                            <input type="text" name="description" class="form-control" placeholder="Внеси опис..." autocomplete="off"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-medium">Телефон</label>
-                            <input type="text" name="phone" class="form-control" required/>
+                            <input type="text" name="phone" class="form-control" placeholder="Внеси телефон..." required autocomplete="off"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-medium">Адреса</label>
-                            <input type="text" name="address" class="form-control" required/>
+                            <input type="text" name="address" class="form-control" placeholder="Внеси адреса..." required autocomplete="off"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-medium">Град</label>

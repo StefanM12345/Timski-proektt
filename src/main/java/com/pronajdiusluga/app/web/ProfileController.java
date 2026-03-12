@@ -29,7 +29,7 @@ public class ProfileController {
                 .orElseThrow();
         model.addAttribute("user", user);
 
-        ServiceProvider provider = serviceProviderService.findByUser(user);
+        ServiceProvider provider = serviceProviderService.findFirstByUser(user);
         model.addAttribute("provider", provider);
 
         return "profile";

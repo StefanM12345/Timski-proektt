@@ -55,8 +55,14 @@ public class ServiceProviderService {
         return serviceProviderRepository.save(sp);
     }
 
-    public ServiceProvider findByUser(User user) {
-        return serviceProviderRepository.findByUser(user);
+    public List<ServiceProvider> findAllByUser(User user) {
+        return serviceProviderRepository.findAllByUserOrderByIdDesc(user);
+    }
+
+    /** Првиот провајдер (за профил) – null ако нема */
+    public ServiceProvider findFirstByUser(User user) {
+        var list = findAllByUser(user);
+        return list.isEmpty() ? null : list.get(0);
     }
 
     public void delete(ServiceProvider sp) {
