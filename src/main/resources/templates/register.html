@@ -2,10 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
-
+    <title>Register</title>
     <style>
-
         body{
             margin:0;
             font-family: Arial, sans-serif;
@@ -18,24 +16,22 @@
             animation: gradientBG 10s ease infinite;
         }
 
-        /* background animation */
         @keyframes gradientBG{
             0%{background-position:0% 50%;}
             50%{background-position:100% 50%;}
             100%{background-position:0% 50%;}
         }
 
-        .login-container{
+        .register-container{
             background:white;
             padding:40px;
             border-radius:15px;
-            width:320px;
+            width:340px;
             box-shadow:0 15px 40px rgba(0,0,0,0.25);
             text-align:center;
             animation: fadeIn 1s ease;
         }
 
-        /* form animation */
         @keyframes fadeIn{
             from{
                 opacity:0;
@@ -48,12 +44,12 @@
         }
 
         h2{
-            margin-bottom:25px;
+            margin-bottom:20px;
         }
 
         .input-group{
             position:relative;
-            margin-bottom:20px;
+            margin-bottom:8px;
         }
 
         input{
@@ -65,7 +61,6 @@
             font-size:14px;
         }
 
-        /* floating label */
         label{
             position:absolute;
             left:12px;
@@ -94,6 +89,7 @@
             font-size:16px;
             cursor:pointer;
             transition:0.3s;
+            margin-top:10px;
         }
 
         button:hover{
@@ -103,13 +99,16 @@
 
         .error{
             color:red;
+            font-size:13px;
+            margin-bottom:4px;
+            text-align:left;
+        }
+
+        .global-error{
+            color:red;
             margin-bottom:10px;
         }
 
-        .success{
-            color:green;
-            margin-bottom:10px;
-        }
         .wrapper{
             display:flex;
             flex-direction:column;
@@ -120,52 +119,60 @@
             margin-bottom:20px;
         }
 
+        .link{
+            margin-top:10px;
+            font-size:13px;
+        }
+
+        .link a{
+            color:#4facfe;
+            text-decoration:none;
+        }
+
+        .link a:hover{
+            text-decoration:underline;
+        }
     </style>
 </head>
-
 <body>
 <div class="wrapper">
-<div class="logoto">
-    <img th:src="@{/images/logo.png}" alt="НајдиУслуга" height="100">
-</div>
-<div class="login-container">
-
-    <h2>Login</h2>
-
-    <div th:if="${param.registered}" class="success">
-        Успешна регистрација. Најави се.
+    <div class="logoto">
+        <img th:src="@{/images/logo.png}" alt="НајдиУслуга" height="100">
     </div>
+    <div class="register-container">
+        <h2>Регистрација</h2>
 
-    <div th:if="${param.error}" class="error">
-        Грешен username/password
-    </div>
+        <div th:if="${#fields.hasGlobalErrors()}" class="global-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
 
-    <div th:if="${param.logout}" class="success">
-        Одјавен си.
-    </div>
+        <form th:action="@{/register}" th:object="${registerForm}" method="post">
 
-    <form method="post" th:action="@{/login}">
+            <div class="input-group">
+                <input type="text" th:field="*{username}" placeholder=" " required>
+                <label>Username</label>
+            </div>
+            <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
 
-        <div class="input-group">
-            <input type="text" name="username" placeholder=" " required>
-            <label>Username</label>
+            <div class="input-group">
+                <input type="password" th:field="*{password}" placeholder=" " required>
+                <label>Password</label>
+            </div>
+            <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+
+            <div class="input-group">
+                <input type="password" th:field="*{confirmPassword}" placeholder=" " required>
+                <label>Потврди Password</label>
+            </div>
+            <div class="error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
+
+            <button type="submit">Регистрирај се</button>
+        </form>
+
+        <div class="link">
+            Веќе имаш акаунт?
+            <a th:href="@{/login}">Најави се</a>
         </div>
-
-        <div class="input-group">
-            <input type="password" name="password" placeholder=" " required>
-            <label>Password</label>
-        </div>
-
-        <button type="submit">Login</button>
-
-    </form>
-
-    <div style="margin-top:10px; font-size:13px;">
-        Немаш акаунт?
-        <a th:href="@{/register}" style="color:#4facfe; text-decoration:none;">Регистрирај се</a>
     </div>
-
-</div>
 </div>
 </body>
 </html>
+
