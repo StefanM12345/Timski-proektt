@@ -1,35 +1,90 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Provider</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Provider</title>
+    <style>
+        body{
+            margin:0;
+            font-family: Arial, sans-serif;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(-45deg,#4facfe,#00f2fe,#43e97b,#38f9d7);
+            background-size:400% 400%;
+            animation: gradientBG 10s ease infinite;
+        }
+        @keyframes gradientBG{
+            0%{background-position:0% 50%;}
+            50%{background-position:100% 50%;}
+            100%{background-position:0% 50%;}
+        }
+        .container{
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            width:500px;
+            box-shadow:0 15px 40px rgba(0,0,0,0.25);
+        }
+        h2{
+            margin-top:0;
+            text-align:center;
+        }
+        .actions button{
+            padding:8px 12px;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+            margin-right:5px;
+        }
+        .edit-btn{
+            background:#4facfe;
+            color:white;
+        }
+        .delete-btn{
+            background:#f44336;
+            color:white;
+        }
+        a.link{
+            color:#4facfe;
+            text-decoration:none;
+        }
+    </style>
+</head>
 <body>
-<h2>SERVICE PROVIDER DASHBOARD</h2>
-<p>Ова го гледа само SERVICE_PROVIDER</p>
+<div class="container">
+    <h2>SERVICE PROVIDER DASHBOARD</h2>
+    <p>Ова го гледа само SERVICE_PROVIDER</p>
 
-<div th:if="${provider != null}">
-    <h3>Моја услуга</h3>
-    <p><b>Име:</b> <span th:text="${provider.name}"></span></p>
-    <p><b>Опис:</b> <span th:text="${provider.description}"></span></p>
-    <p><b>Град:</b> <span th:text="${provider.city.name}"></span></p>
-    <p><b>Категорија:</b> <span th:text="${provider.category.name}"></span></p>
-    <p><b>Адреса:</b> <span th:text="${provider.address}"></span></p>
-    <p><b>Телефон:</b> <span th:text="${provider.phone}"></span></p>
+    <div th:if="${provider != null}">
+        <h3>Моја услуга</h3>
+        <p><b>Име:</b> <span th:text="${provider.name}"></span></p>
+        <p><b>Опис:</b> <span th:text="${provider.description}"></span></p>
+        <p><b>Град:</b> <span th:text="${provider.city.name}"></span></p>
+        <p><b>Категорија:</b> <span th:text="${provider.category.name}"></span></p>
+        <p><b>Адреса:</b> <span th:text="${provider.address}"></span></p>
+        <p><b>Телефон:</b> <span th:text="${provider.phone}"></span></p>
 
-    <form th:action="@{/provider/edit}" method="get" style="display:inline;">
-        <button type="submit">Уреди</button>
-    </form>
-    <form th:action="@{/provider/delete}" method="post" style="display:inline;" 
-          onsubmit="return confirm('Дали си сигурен дека сакаш да ја избришеш услугата?');">
-        <button type="submit">Избриши</button>
-    </form>
+        <div class="actions">
+            <form th:action="@{/provider/edit}" method="get" style="display:inline;">
+                <button type="submit" class="edit-btn">Уреди</button>
+            </form>
+            <form th:action="@{/provider/delete}" method="post" style="display:inline;"
+                  onsubmit="return confirm('Дали си сигурен дека сакаш да ја избришеш услугата?');">
+                <button type="submit" class="delete-btn">Избриши</button>
+            </form>
+        </div>
+    </div>
+
+    <div th:if="${provider == null}">
+        <p>Немаш креирано оглас.</p>
+        <p>
+            <a th:href="@{/provider/create}" class="link">Креирај го твојот оглас</a>
+        </p>
+    </div>
+
+    <p><a th:href="@{/}" class="link">← Назад кон почетна</a></p>
 </div>
-
-<div th:if="${provider == null}">
-    <p>Немаш креирано оглас.</p>
-    <p>
-        <a th:href="@{/provider/create}">Креирај го твојот оглас</a>
-    </p>
-</div>
-
-<p><a th:href="@{/}">Home</a></p>
 </body>
 </html>

@@ -1,9 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>User</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+    <style>
+        body{
+            margin:0;
+            font-family: Arial, sans-serif;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(-45deg,#4facfe,#00f2fe,#43e97b,#38f9d7);
+            background-size:400% 400%;
+            animation: gradientBG 10s ease infinite;
+        }
+        @keyframes gradientBG{
+            0%{background-position:0% 50%;}
+            50%{background-position:100% 50%;}
+            100%{background-position:0% 50%;}
+        }
+        .container{
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            width:400px;
+            box-shadow:0 15px 40px rgba(0,0,0,0.25);
+            text-align:center;
+        }
+        h2{
+            margin-top:0;
+        }
+        a{
+            color:#4facfe;
+            text-decoration:none;
+        }
+    </style>
+</head>
 <body>
-<h2>USER DASHBOARD</h2>
-<p>Ова го гледа само USER</p>
-<a th:href="@{/}">Home</a>
+<div class="container">
+    <h2>USER DASHBOARD</h2>
+    <p>Ова го гледа само USER</p>
+    <p><a th:href="@{/}">← Назад кон почетна</a></p>
+</div>
 </body>
 </html>

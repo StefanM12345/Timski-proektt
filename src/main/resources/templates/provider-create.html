@@ -3,57 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <title>Креирај го твојот оглас</title>
+    <style>
+        body{
+            margin:0;
+            font-family: Arial, sans-serif;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(-45deg,#4facfe,#00f2fe,#43e97b,#38f9d7);
+            background-size:400% 400%;
+            animation: gradientBG 10s ease infinite;
+        }
+        @keyframes gradientBG{
+            0%{background-position:0% 50%;}
+            50%{background-position:100% 50%;}
+            100%{background-position:0% 50%;}
+        }
+        .container{
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            width:420px;
+            box-shadow:0 15px 40px rgba(0,0,0,0.25);
+        }
+        h2{
+            margin-top:0;
+            text-align:center;
+        }
+        .field{
+            margin-bottom:10px;
+            display:flex;
+            flex-direction:column;
+        }
+        label{
+            font-size:13px;
+            margin-bottom:4px;
+        }
+        input,select{
+            padding:8px;
+            border-radius:6px;
+            border:1px solid #ccc;
+            font-size:14px;
+        }
+        button{
+            margin-top:8px;
+            padding:10px;
+            border:none;
+            border-radius:8px;
+            background:#4facfe;
+            color:white;
+            font-size:15px;
+            cursor:pointer;
+        }
+        a.link{
+            margin-left:10px;
+            color:#4facfe;
+            text-decoration:none;
+        }
+    </style>
 </head>
 <body>
-<h2>Креирај го твојот оглас</h2>
+<div class="container">
+    <h2>Креирај го твојот оглас</h2>
 
-<form th:action="@{/provider/create}" method="post">
-    <p>
-        <label>Име на бизнис / услуга:
+    <form th:action="@{/provider/create}" method="post">
+        <div class="field">
+            <label>Име на бизнис / услуга</label>
             <input type="text" name="name" required/>
-        </label>
-    </p>
-    <p>
-        <label>Опис:
+        </div>
+        <div class="field">
+            <label>Опис</label>
             <input type="text" name="description"/>
-        </label>
-    </p>
-    <p>
-        <label>Телефон:
+        </div>
+        <div class="field">
+            <label>Телефон</label>
             <input type="text" name="phone" required/>
-        </label>
-    </p>
-    <p>
-        <label>Адреса:
+        </div>
+        <div class="field">
+            <label>Адреса</label>
             <input type="text" name="address" required/>
-        </label>
-    </p>
-    <p>
-        <label>Град:
+        </div>
+        <div class="field">
+            <label>Град</label>
             <select name="cityId" required>
                 <option value="">-- Одбери град --</option>
                 <option th:each="c : ${cities}"
                         th:value="${c.id}"
                         th:text="${c.name}"></option>
             </select>
-        </label>
-    </p>
-    <p>
-        <label>Категорија:
+        </div>
+        <div class="field">
+            <label>Категорија</label>
             <select name="categoryId" required>
                 <option value="">-- Одбери категорија --</option>
                 <option th:each="cat : ${categories}"
                         th:value="${cat.id}"
                         th:text="${cat.name}"></option>
             </select>
-        </label>
-    </p>
-    <p>
+        </div>
         <button type="submit">Зачувај оглас</button>
-        <a th:href="@{/provider}">Откажи</a>
-    </p>
-</form>
-
+        <a th:href="@{/provider}" class="link">Откажи</a>
+    </form>
+</div>
 </body>
 </html>
 

@@ -3,37 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <title>Уреди услуга</title>
+    <style>
+        body{
+            margin:0;
+            font-family: Arial, sans-serif;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(-45deg,#4facfe,#00f2fe,#43e97b,#38f9d7);
+            background-size:400% 400%;
+            animation: gradientBG 10s ease infinite;
+        }
+        @keyframes gradientBG{
+            0%{background-position:0% 50%;}
+            50%{background-position:100% 50%;}
+            100%{background-position:0% 50%;}
+        }
+        .container{
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            width:420px;
+            box-shadow:0 15px 40px rgba(0,0,0,0.25);
+        }
+        h2{
+            margin-top:0;
+            text-align:center;
+        }
+        .field{
+            margin-bottom:10px;
+            display:flex;
+            flex-direction:column;
+        }
+        label{
+            font-size:13px;
+            margin-bottom:4px;
+        }
+        input{
+            padding:8px;
+            border-radius:6px;
+            border:1px solid #ccc;
+            font-size:14px;
+        }
+        button{
+            margin-top:8px;
+            padding:10px;
+            border:none;
+            border-radius:8px;
+            background:#4facfe;
+            color:white;
+            font-size:15px;
+            cursor:pointer;
+        }
+        a.link{
+            margin-left:10px;
+            color:#4facfe;
+            text-decoration:none;
+        }
+    </style>
 </head>
 <body>
-<h2>Уреди ја твојата услуга</h2>
+<div class="container">
+    <h2>Уреди ја твојата услуга</h2>
 
-<form th:action="@{/provider/edit}" method="post" th:object="${provider}">
-    <p>
-        <label>Име:
+    <form th:action="@{/provider/edit}" method="post" th:object="${provider}">
+        <div class="field">
+            <label>Име</label>
             <input type="text" th:field="*{name}"/>
-        </label>
-    </p>
-    <p>
-        <label>Опис:
+        </div>
+        <div class="field">
+            <label>Опис</label>
             <input type="text" th:field="*{description}"/>
-        </label>
-    </p>
-    <p>
-        <label>Телефон:
+        </div>
+        <div class="field">
+            <label>Телефон</label>
             <input type="text" th:field="*{phone}"/>
-        </label>
-    </p>
-    <p>
-        <label>Адреса:
+        </div>
+        <div class="field">
+            <label>Адреса</label>
             <input type="text" th:field="*{address}"/>
-        </label>
-    </p>
-    <p>
+        </div>
         <button type="submit">Зачувај</button>
-        <a th:href="@{/provider}">Откажи</a>
-    </p>
-</form>
-
+        <a th:href="@{/provider}" class="link">Откажи</a>
+    </form>
+</div>
 </body>
 </html>
 

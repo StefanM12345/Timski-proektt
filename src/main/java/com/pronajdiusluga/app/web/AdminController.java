@@ -3,9 +3,11 @@ package com.pronajdiusluga.app.web;
 import com.pronajdiusluga.app.model.ProviderRequest;
 import com.pronajdiusluga.app.model.ProviderRequestStatus;
 import com.pronajdiusluga.app.model.Role;
+import com.pronajdiusluga.app.model.ServiceProvider;
 import com.pronajdiusluga.app.model.User;
 import com.pronajdiusluga.app.repository.ProviderRequestRepository;
 import com.pronajdiusluga.app.repository.UserRepository;
+import com.pronajdiusluga.app.service.ServiceProviderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,11 +23,13 @@ public class AdminController {
 
     private final ProviderRequestRepository providerRequestRepository;
     private final UserRepository userRepository;
+    private final ServiceProviderService serviceProviderService;
 
     @GetMapping
     public String admin(Model model) {
         model.addAttribute("pendingRequests",
                 providerRequestRepository.findByStatus(ProviderRequestStatus.PENDING));
+        model.addAttribute("providers", serviceProviderService.findAll());
         return "admin-dashboard";
     }
 
@@ -52,6 +56,13 @@ public class AdminController {
         request.setStatus(ProviderRequestStatus.REJECTED);
         providerRequestRepository.save(request);
 
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/providers/{id}/delete")
+    public String deleteProvider(@PathVariable Long id) {
+        ServiceProvider provider = serviceProviderService.getById(id);
+        serviceProviderService.delete(provider);
         return "redirect:/admin";
     }
 }

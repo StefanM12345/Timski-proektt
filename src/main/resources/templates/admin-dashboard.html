@@ -1,48 +1,152 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Admin</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <style>
+        body{
+            margin:0;
+            font-family: Arial, sans-serif;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(-45deg,#4facfe,#00f2fe,#43e97b,#38f9d7);
+            background-size:400% 400%;
+            animation: gradientBG 10s ease infinite;
+        }
+        @keyframes gradientBG{
+            0%{background-position:0% 50%;}
+            50%{background-position:100% 50%;}
+            100%{background-position:0% 50%;}
+        }
+        .container{
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            width:800px;
+            max-height:80vh;
+            overflow:auto;
+            box-shadow:0 15px 40px rgba(0,0,0,0.25);
+        }
+        h2{
+            margin-top:0;
+            margin-bottom:10px;
+            text-align:center;
+        }
+        table{
+            width:100%;
+            border-collapse:collapse;
+            font-size:14px;
+        }
+        th,td{
+            padding:8px;
+            border-bottom:1px solid #eee;
+            text-align:left;
+        }
+        th{
+            background:#f3f5f9;
+        }
+        button{
+            padding:6px 10px;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+        }
+        .approve{
+            background:#4caf50;
+            color:white;
+        }
+        .reject{
+            background:#f44336;
+            color:white;
+        }
+        a.home{
+            display:inline-block;
+            margin-top:10px;
+            color:#4facfe;
+            text-decoration:none;
+        }
+    </style>
+</head>
 <body>
-<h2>ADMIN DASHBOARD</h2>
-<p>Ова го гледа само ADMIN</p>
+<div class="container">
+    <h2>ADMIN DASHBOARD</h2>
+    <p>Ова го гледа само ADMIN</p>
 
-<h3>Барања за давач на услуга (PENDING)</h3>
+    <h3>Барања за давач на услуга (PENDING)</h3>
 
-<table border="1" cellpadding="5" th:if="${#lists.size(pendingRequests) > 0}">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>User</th>
-        <th>Име на бизнис</th>
-        <th>Град</th>
-        <th>Категорија</th>
-        <th>Телефон</th>
-        <th>Адреса</th>
-        <th>Акции</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="r : ${pendingRequests}">
-        <td th:text="${r.id}"></td>
-        <td th:text="${r.user.username}"></td>
-        <td th:text="${r.name}"></td>
-        <td th:text="${r.city.name}"></td>
-        <td th:text="${r.category.name}"></td>
-        <td th:text="${r.phone}"></td>
-        <td th:text="${r.address}"></td>
-        <td>
-            <form th:action="@{/admin/provider-requests/{id}/approve(id=${r.id})}" method="post" style="display:inline;">
-                <button type="submit">Одобри</button>
-            </form>
-            <form th:action="@{/admin/provider-requests/{id}/reject(id=${r.id})}" method="post" style="display:inline;">
-                <button type="submit">Одбиј</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <table th:if="${#lists.size(pendingRequests) > 0}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Име на бизнис</th>
+            <th>Град</th>
+            <th>Категорија</th>
+            <th>Телефон</th>
+            <th>Адреса</th>
+            <th>Акции</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${pendingRequests}">
+            <td th:text="${r.id}"></td>
+            <td th:text="${r.user.username}"></td>
+            <td th:text="${r.name}"></td>
+            <td th:text="${r.city.name}"></td>
+            <td th:text="${r.category.name}"></td>
+            <td th:text="${r.phone}"></td>
+            <td th:text="${r.address}"></td>
+            <td>
+                <form th:action="@{/admin/provider-requests/{id}/approve(id=${r.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="approve">Одобри</button>
+                </form>
+                <form th:action="@{/admin/provider-requests/{id}/reject(id=${r.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="reject">Одбиј</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
-<p th:if="${#lists.size(pendingRequests) == 0}">Нема активни барања.</p>
+    <p th:if="${#lists.size(pendingRequests) == 0}">Нема активни барања.</p>
 
-<p><a th:href="@{/}">Home</a></p>
+    <h3>Сите огласи</h3>
+    <table th:if="${#lists.size(providers) > 0}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Име</th>
+            <th>User</th>
+            <th>Град</th>
+            <th>Категорија</th>
+            <th>Телефон</th>
+            <th>Адреса</th>
+            <th>Акции</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${providers}">
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.user != null ? p.user.username : '—'}"></td>
+            <td th:text="${p.city.name}"></td>
+            <td th:text="${p.category.name}"></td>
+            <td th:text="${p.phone}"></td>
+            <td th:text="${p.address}"></td>
+            <td>
+                <form th:action="@{/admin/providers/{id}/delete(id=${p.id})}" method="post"
+                      onsubmit="return confirm('Дали си сигурен дека сакаш да го избришеш овој оглас?');">
+                    <button type="submit" class="reject">Избриши</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p th:if="${#lists.size(providers) == 0}">Нема креирани огласи.</p>
+
+    <a th:href="@{/}" class="home">← Назад кон почетна</a>
+</div>
 </body>
 </html>
