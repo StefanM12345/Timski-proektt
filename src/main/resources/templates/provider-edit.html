@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Уреди услуга</title>
+</head>
+<body>
+<h2>Уреди ја твојата услуга</h2>
+
+<form th:action="@{/provider/edit}" method="post" th:object="${provider}">
+    <p>
+        <label>Име:
+            <input type="text" th:field="*{name}"/>
+        </label>
+    </p>
+    <p>
+        <label>Опис:
+            <input type="text" th:field="*{description}"/>
+        </label>
+    </p>
+    <p>
+        <label>Телефон:
+            <input type="text" th:field="*{phone}"/>
+        </label>
+    </p>
+    <p>
+        <label>Адреса:
+            <input type="text" th:field="*{address}"/>
+        </label>
+    </p>
+    <p>
+        <button type="submit">Зачувај</button>
+        <a th:href="@{/provider}">Откажи</a>
+    </p>
+</form>
+
+</body>
+</html>
+

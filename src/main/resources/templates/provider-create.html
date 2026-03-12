@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Креирај го твојот оглас</title>
+</head>
+<body>
+<h2>Креирај го твојот оглас</h2>
+
+<form th:action="@{/provider/create}" method="post">
+    <p>
+        <label>Име на бизнис / услуга:
+            <input type="text" name="name" required/>
+        </label>
+    </p>
+    <p>
+        <label>Опис:
+            <input type="text" name="description"/>
+        </label>
+    </p>
+    <p>
+        <label>Телефон:
+            <input type="text" name="phone" required/>
+        </label>
+    </p>
+    <p>
+        <label>Адреса:
+            <input type="text" name="address" required/>
+        </label>
+    </p>
+    <p>
+        <label>Град:
+            <select name="cityId" required>
+                <option value="">-- Одбери град --</option>
+                <option th:each="c : ${cities}"
+                        th:value="${c.id}"
+                        th:text="${c.name}"></option>
+            </select>
+        </label>
+    </p>
+    <p>
+        <label>Категорија:
+            <select name="categoryId" required>
+                <option value="">-- Одбери категорија --</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.id}"
+                        th:text="${cat.name}"></option>
+            </select>
+        </label>
+    </p>
+    <p>
+        <button type="submit">Зачувај оглас</button>
+        <a th:href="@{/provider}">Откажи</a>
+    </p>
+</form>
+
+</body>
+</html>
+

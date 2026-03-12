@@ -1,14 +1,57 @@
 package com.pronajdiusluga.app.web;
 
+import com.pronajdiusluga.app.model.ProviderRequest;
+import com.pronajdiusluga.app.model.ProviderRequestStatus;
+import com.pronajdiusluga.app.model.Role;
+import com.pronajdiusluga.app.model.User;
+import com.pronajdiusluga.app.repository.ProviderRequestRepository;
+import com.pronajdiusluga.app.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
+
+    private final ProviderRequestRepository providerRequestRepository;
+    private final UserRepository userRepository;
+
     @GetMapping
-    public String admin() {
+    public String admin(Model model) {
+        model.addAttribute("pendingRequests",
+                providerRequestRepository.findByStatus(ProviderRequestStatus.PENDING));
         return "admin-dashboard";
+    }
+
+    @PostMapping("/provider-requests/{id}/approve")
+    public String approve(@PathVariable Long id) {
+        ProviderRequest request = providerRequestRepository.findById(id)
+                .orElseThrow();
+
+        User user = request.getUser();
+        user.setRole(Role.SERVICE_PROVIDER);
+        userRepository.save(user);
+
+        request.setStatus(ProviderRequestStatus.APPROVED);
+        providerRequestRepository.save(request);
+
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/provider-requests/{id}/reject")
+    public String reject(@PathVariable Long id) {
+        ProviderRequest request = providerRequestRepository.findById(id)
+                .orElseThrow();
+
+        request.setStatus(ProviderRequestStatus.REJECTED);
+        providerRequestRepository.save(request);
+
+        return "redirect:/admin";
     }
 }

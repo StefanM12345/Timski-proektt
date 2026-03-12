@@ -2,6 +2,7 @@ package com.pronajdiusluga.app.service;
 
 import lombok.RequiredArgsConstructor;
 import com.pronajdiusluga.app.model.ServiceProvider;
+import com.pronajdiusluga.app.model.User;
 import com.pronajdiusluga.app.repository.ServiceProviderRepository;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +41,13 @@ public class ServiceProviderService {
 
     public ServiceProvider save(ServiceProvider sp) {
         return serviceProviderRepository.save(sp);
+    }
+
+    public ServiceProvider findByUser(User user) {
+        return serviceProviderRepository.findByUser(user);
+    }
+
+    public void delete(ServiceProvider sp) {
+        serviceProviderRepository.delete(sp);
     }
 }

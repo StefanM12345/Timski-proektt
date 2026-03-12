@@ -4,6 +4,45 @@
 <body>
 <h2>ADMIN DASHBOARD</h2>
 <p>Ова го гледа само ADMIN</p>
-<a th:href="@{/}">Home</a>
+
+<h3>Барања за давач на услуга (PENDING)</h3>
+
+<table border="1" cellpadding="5" th:if="${#lists.size(pendingRequests) > 0}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>Име на бизнис</th>
+        <th>Град</th>
+        <th>Категорија</th>
+        <th>Телефон</th>
+        <th>Адреса</th>
+        <th>Акции</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="r : ${pendingRequests}">
+        <td th:text="${r.id}"></td>
+        <td th:text="${r.user.username}"></td>
+        <td th:text="${r.name}"></td>
+        <td th:text="${r.city.name}"></td>
+        <td th:text="${r.category.name}"></td>
+        <td th:text="${r.phone}"></td>
+        <td th:text="${r.address}"></td>
+        <td>
+            <form th:action="@{/admin/provider-requests/{id}/approve(id=${r.id})}" method="post" style="display:inline;">
+                <button type="submit">Одобри</button>
+            </form>
+            <form th:action="@{/admin/provider-requests/{id}/reject(id=${r.id})}" method="post" style="display:inline;">
+                <button type="submit">Одбиј</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<p th:if="${#lists.size(pendingRequests) == 0}">Нема активни барања.</p>
+
+<p><a th:href="@{/}">Home</a></p>
 </body>
 </html>

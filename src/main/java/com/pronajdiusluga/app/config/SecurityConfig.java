@@ -21,11 +21,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         // јавни страници (сите може да ги гледаат)
-                        .requestMatchers("/", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/login", "/register",
+                                "/css/**", "/js/**", "/images/**").permitAll()
 
                         // само USER може
                         .requestMatchers("/comment/**").hasRole("USER")
                         .requestMatchers("/apply/**").hasRole("USER")
+                        .requestMatchers("/provider-request/**").hasRole("USER")
 
                         // provider
                         .requestMatchers("/provider/**").hasRole("SERVICE_PROVIDER")

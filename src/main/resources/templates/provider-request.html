@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Креирај го твојот оглас</title>
+    <style>
+        body{
+            margin:0;
+            font-family: Arial, sans-serif;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(-45deg,#4facfe,#00f2fe,#43e97b,#38f9d7);
+            background-size:400% 400%;
+            animation: gradientBG 10s ease infinite;
+        }
+
+        @keyframes gradientBG{
+            0%{background-position:0% 50%;}
+            50%{background-position:100% 50%;}
+            100%{background-position:0% 50%;}
+        }
+
+        .container{
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            width:420px;
+            box-shadow:0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        h2{
+            margin-top:0;
+            margin-bottom:15px;
+            text-align:center;
+        }
+
+        form{
+            display:grid;
+            gap:10px;
+        }
+
+        .field{
+            display:flex;
+            flex-direction:column;
+        }
+
+        label{
+            font-size:13px;
+            margin-bottom:4px;
+        }
+
+        input, select, textarea{
+            padding:8px;
+            border-radius:6px;
+            border:1px solid #ccc;
+            font-size:14px;
+        }
+
+        textarea{
+            resize:vertical;
+            min-height:60px;
+        }
+
+        .error{
+            color:red;
+            font-size:12px;
+        }
+
+        button{
+            margin-top:8px;
+            padding:10px;
+            border:none;
+            border-radius:8px;
+            background:#4facfe;
+            color:white;
+            font-size:15px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#3a8ee6;
+        }
+
+        .top-link{
+            position:absolute;
+            top:20px;
+            left:20px;
+            color:white;
+        }
+    </style>
+</head>
+<body>
+
+<a th:href="@{/}" class="top-link">← Назад кон почетна</a>
+
+<div class="container">
+    <h2>Креирај го твојот оглас</h2>
+
+    <form th:action="@{/provider-request}" th:object="${providerRequestForm}" method="post">
+
+        <div class="field">
+            <label>Име на бизнис / услуга</label>
+            <input type="text" th:field="*{name}">
+            <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+
+        <div class="field">
+            <label>Опис</label>
+            <textarea th:field="*{description}"></textarea>
+        </div>
+
+        <div class="field">
+            <label>Телефон</label>
+            <input type="text" th:field="*{phone}">
+            <div class="error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+        </div>
+
+        <div class="field">
+            <label>Адреса</label>
+            <input type="text" th:field="*{address}">
+            <div class="error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+        </div>
+
+        <div class="field">
+            <label>Град</label>
+            <select th:field="*{cityId}">
+                <option value="">-- Одбери град --</option>
+                <option th:each="c : ${cities}"
+                        th:value="${c.id}"
+                        th:text="${c.name}"></option>
+            </select>
+            <div class="error" th:if="${#fields.hasErrors('cityId')}" th:errors="*{cityId}"></div>
+        </div>
+
+        <div class="field">
+            <label>Категорија</label>
+            <select th:field="*{categoryId}">
+                <option value="">-- Одбери категорија --</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.id}"
+                        th:text="${cat.name}"></option>
+            </select>
+            <div class="error" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></div>
+        </div>
+
+        <button type="submit">Испрати барање до админ</button>
+    </form>
+</div>
+
+</body>
+</html>
+

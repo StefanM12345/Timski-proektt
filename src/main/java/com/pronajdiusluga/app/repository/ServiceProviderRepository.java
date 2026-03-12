@@ -1,6 +1,7 @@
 package com.pronajdiusluga.app.repository;
 
 import com.pronajdiusluga.app.model.ServiceProvider;
+import com.pronajdiusluga.app.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -18,4 +19,7 @@ public interface ServiceProviderRepository extends JpaRepository<ServiceProvider
 
     // Пребарување по keyword во име (contains)
     List<ServiceProvider> findByNameContainingIgnoreCase(String keyword);
+
+    // Провајдер по user
+    ServiceProvider findByUser(User user);
 }

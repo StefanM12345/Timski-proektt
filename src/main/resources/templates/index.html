@@ -191,9 +191,9 @@
 
         <div sec:authorize="isAuthenticated()">
 
-<span class="username">
-👤 <span sec:authentication="name"></span>
-</span>
+        <span class="username">
+        👤 <span sec:authentication="name"></span>
+        </span>
 
             <form th:action="@{/logout}" method="post" style="display:inline;">
                 <button class="logout-btn">Logout</button>
@@ -203,6 +203,27 @@
 
         <div sec:authorize="!isAuthenticated()">
             <a th:href="@{/login}" style="color:white;">Login</a>
+        </div>
+
+        <div sec:authorize="hasRole('USER')">
+            <a th:href="@{/provider-request/new}"
+               style="margin-left:15px; padding:6px 12px; border-radius:8px; background:white; color:#4facfe; text-decoration:none; font-weight:bold;">
+                Испрати барање до админ
+            </a>
+        </div>
+
+        <div sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin}"
+               style="margin-left:15px; padding:6px 12px; border-radius:8px; background:#ffffff; color:#d9534f; text-decoration:none; font-weight:bold;">
+                Барања за давачи
+            </a>
+        </div>
+
+        <div sec:authorize="hasRole('SERVICE_PROVIDER')">
+            <a th:href="@{/provider}"
+               style="margin-left:15px; padding:6px 12px; border-radius:8px; background:#ffffff; color:#28a745; text-decoration:none; font-weight:bold;">
+                Мој профил (давач)
+            </a>
         </div>
 
     </div>
