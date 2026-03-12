@@ -67,7 +67,7 @@
 <div class="container">
     <h2>Уреди ја твојата услуга</h2>
 
-    <form th:action="@{/provider/edit}" method="post" th:object="${provider}">
+    <form th:action="@{/provider/edit/{id}(id=${provider.id})}" method="post" th:object="${provider}">
         <div class="field">
             <label>Име</label>
             <input type="text" th:field="*{name}"/>

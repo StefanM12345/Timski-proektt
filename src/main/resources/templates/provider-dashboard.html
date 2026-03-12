@@ -57,31 +57,37 @@
     <h2>SERVICE PROVIDER DASHBOARD</h2>
     <p>Ова го гледа само SERVICE_PROVIDER</p>
 
-    <div th:if="${provider != null}">
-        <h3>Моја услуга</h3>
-        <p><b>Име:</b> <span th:text="${provider.name}"></span></p>
-        <p><b>Опис:</b> <span th:text="${provider.description}"></span></p>
-        <p><b>Град:</b> <span th:text="${provider.city.name}"></span></p>
-        <p><b>Категорија:</b> <span th:text="${provider.category.name}"></span></p>
-        <p><b>Адреса:</b> <span th:text="${provider.address}"></span></p>
-        <p><b>Телефон:</b> <span th:text="${provider.phone}"></span></p>
-
-        <div class="actions">
-            <form th:action="@{/provider/edit}" method="get" style="display:inline;">
-                <button type="submit" class="edit-btn">Уреди</button>
-            </form>
-            <form th:action="@{/provider/delete}" method="post" style="display:inline;"
-                  onsubmit="return confirm('Дали си сигурен дека сакаш да ја избришеш услугата?');">
-                <button type="submit" class="delete-btn">Избриши</button>
-            </form>
-        </div>
-    </div>
-
-    <div th:if="${provider == null}">
+    <div th:if="${#lists.isEmpty(providers)}">
         <p>Немаш креирано оглас.</p>
         <p>
-            <a th:href="@{/provider/create}" class="link">Креирај го твојот оглас</a>
+            <a th:href="@{/provider/create}" class="link">Креирај го твојот прв оглас</a>
         </p>
+    </div>
+
+    <div th:if="${!#lists.isEmpty(providers)}">
+        <p>
+            <a th:href="@{/provider/create}" class="link">+ Додај нов оглас</a>
+        </p>
+
+        <div th:each="p : ${providers}" style="border-top:1px solid #eee; margin-top:10px; padding-top:10px;">
+            <h3 th:text="${p.name}">Моја услуга</h3>
+            <p><b>Опис:</b> <span th:text="${p.description}"></span></p>
+            <p><b>Град:</b> <span th:text="${p.city.name}"></span></p>
+            <p><b>Категорија:</b> <span th:text="${p.category.name}"></span></p>
+            <p><b>Адреса:</b> <span th:text="${p.address}"></span></p>
+            <p><b>Телефон:</b> <span th:text="${p.phone}"></span></p>
+            <p><b>Статус:</b> <span th:text="${p.status}"></span></p>
+
+            <div class="actions">
+                <form th:action="@{/provider/edit/{id}(id=${p.id})}" method="get" style="display:inline;">
+                    <button type="submit" class="edit-btn">Уреди</button>
+                </form>
+                <form th:action="@{/provider/delete/{id}(id=${p.id})}" method="post" style="display:inline;"
+                      onsubmit="return confirm('Дали си сигурен дека сакаш да ја избришеш услугата?');">
+                    <button type="submit" class="delete-btn">Избриши</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <p><a th:href="@{/}" class="link">← Назад кон почетна</a></p>
