@@ -4,6 +4,7 @@ import com.pronajdiusluga.app.model.ProviderRequest;
 import com.pronajdiusluga.app.model.ProviderRequestStatus;
 import com.pronajdiusluga.app.model.Role;
 import com.pronajdiusluga.app.model.ServiceProvider;
+import com.pronajdiusluga.app.model.ServiceProviderStatus;
 import com.pronajdiusluga.app.model.User;
 import com.pronajdiusluga.app.repository.ProviderRequestRepository;
 import com.pronajdiusluga.app.repository.UserRepository;
@@ -30,6 +31,7 @@ public class AdminController {
         model.addAttribute("pendingRequests",
                 providerRequestRepository.findByStatus(ProviderRequestStatus.PENDING));
         model.addAttribute("providers", serviceProviderService.findAll());
+        model.addAttribute("pendingProviders", serviceProviderService.findByStatus(ServiceProviderStatus.PENDING));
         return "admin-dashboard";
     }
 
@@ -63,6 +65,22 @@ public class AdminController {
     public String deleteProvider(@PathVariable Long id) {
         ServiceProvider provider = serviceProviderService.getById(id);
         serviceProviderService.delete(provider);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/providers/{id}/approve-ad")
+    public String approveAd(@PathVariable Long id) {
+        ServiceProvider provider = serviceProviderService.getById(id);
+        provider.setStatus(ServiceProviderStatus.APPROVED);
+        serviceProviderService.save(provider);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/providers/{id}/reject-ad")
+    public String rejectAd(@PathVariable Long id) {
+        ServiceProvider provider = serviceProviderService.getById(id);
+        provider.setStatus(ServiceProviderStatus.REJECTED);
+        serviceProviderService.save(provider);
         return "redirect:/admin";
     }
 }

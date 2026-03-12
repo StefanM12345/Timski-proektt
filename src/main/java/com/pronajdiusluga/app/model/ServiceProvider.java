@@ -24,7 +24,11 @@ public class ServiceProvider {
     @ManyToOne(optional = false)
     private Category category;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    private ServiceProviderStatus status;
 }

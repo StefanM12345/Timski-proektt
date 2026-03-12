@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -17,6 +19,8 @@ public class User {
 
     private String username;
     private String password;
+    @OneToMany(mappedBy = "user")
+    private List<ServiceProvider> providers = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Role role;

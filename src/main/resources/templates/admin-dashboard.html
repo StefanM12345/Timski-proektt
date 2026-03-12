@@ -112,6 +112,42 @@
 
     <p th:if="${#lists.size(pendingRequests) == 0}">Нема активни барања.</p>
 
+    <h3>Огласи што чекаат одобрување</h3>
+    <table th:if="${#lists.size(pendingProviders) > 0}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Име</th>
+            <th>User</th>
+            <th>Град</th>
+            <th>Категорија</th>
+            <th>Телефон</th>
+            <th>Адреса</th>
+            <th>Акции</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${pendingProviders}">
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.user != null ? p.user.username : '—'}"></td>
+            <td th:text="${p.city.name}"></td>
+            <td th:text="${p.category.name}"></td>
+            <td th:text="${p.phone}"></td>
+            <td th:text="${p.address}"></td>
+            <td>
+                <form th:action="@{/admin/providers/{id}/approve-ad(id=${p.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="approve">Одобри оглас</button>
+                </form>
+                <form th:action="@{/admin/providers/{id}/reject-ad(id=${p.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="reject">Одбиј оглас</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p th:if="${#lists.size(pendingProviders) == 0}">Нема огласи што чекаат одобрување.</p>
+
     <h3>Сите огласи</h3>
     <table th:if="${#lists.size(providers) > 0}">
         <thead>
