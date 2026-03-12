@@ -46,7 +46,11 @@ public class ProviderController {
         }
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow();
-        model.addAttribute("cities", cityRepository.findAll());
+        ServiceProvider existing = serviceProviderService.findByUser(user);
+        if (existing != null) {
+            return "redirect:/provider";
+        }
+        model.addAttribute("cities", cityRepository.findAllByOrderByNameAsc());
         model.addAttribute("categories", categoryRepository.findAll());
         return "provider-create";
     }
@@ -95,6 +99,7 @@ public class ProviderController {
             return "redirect:/provider";
         }
         model.addAttribute("provider", provider);
+        model.addAttribute("categories", categoryRepository.findAll());
         return "provider-edit";
     }
 
@@ -104,7 +109,8 @@ public class ProviderController {
                        @RequestParam String name,
                        @RequestParam(required = false) String description,
                        @RequestParam String phone,
-                       @RequestParam String address) {
+                       @RequestParam String address,
+                       @RequestParam Long categoryId) {
         if (userDetails == null) {
             return "redirect:/login";
         }
@@ -114,10 +120,12 @@ public class ProviderController {
         if (provider == null || !provider.getUser().getId().equals(user.getId())) {
             return "redirect:/provider";
         }
+        Category category = categoryRepository.findById(categoryId).orElseThrow();
         provider.setName(name);
         provider.setDescription(description);
         provider.setPhone(phone);
         provider.setAddress(address);
+        provider.setCategory(category);
         serviceProviderService.save(provider);
         return "redirect:/provider";
     }
