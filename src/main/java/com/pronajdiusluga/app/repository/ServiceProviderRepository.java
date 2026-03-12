@@ -26,4 +26,6 @@ public interface ServiceProviderRepository extends JpaRepository<ServiceProvider
     ServiceProvider findByUser(User user);
 
     List<ServiceProvider> findByCity(city city);
+
+    List<ServiceProvider> findByStatus(ServiceProviderStatus status);
 }

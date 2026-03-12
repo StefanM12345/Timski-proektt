@@ -55,7 +55,7 @@ public class ServiceProviderService {
         return serviceProviderRepository.save(sp);
     }
 
-    public List<ServiceProvider> findByUser(User user) {
+    public ServiceProvider findByUser(User user) {
         return serviceProviderRepository.findByUser(user);
     }
 

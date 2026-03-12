@@ -34,7 +34,8 @@ public class ProviderController {
         }
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow();
-        model.addAttribute("providers", serviceProviderService.findByUser(user));
+        ServiceProvider provider = serviceProviderService.findByUser(user);
+        model.addAttribute("provider", provider);
         return "provider-dashboard";
     }
 
@@ -85,17 +86,16 @@ public class ProviderController {
         return "redirect:/provider";
     }
 
-    @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Long id,
-                           @AuthenticationPrincipal UserDetails userDetails,
+    @GetMapping("/edit")
+    public String editForm(@AuthenticationPrincipal UserDetails userDetails,
                            Model model) {
         if (userDetails == null) {
             return "redirect:/login";
         }
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow();
-        ServiceProvider provider = serviceProviderService.getById(id);
-        if (!provider.getUser().getId().equals(user.getId())) {
+        ServiceProvider provider = serviceProviderService.findByUser(user);
+        if (provider == null) {
             return "redirect:/provider";
         }
         model.addAttribute("provider", provider);
@@ -103,9 +103,8 @@ public class ProviderController {
         return "provider-edit";
     }
 
-    @PostMapping("/edit/{id}")
-    public String edit(@PathVariable Long id,
-                       @AuthenticationPrincipal UserDetails userDetails,
+    @PostMapping("/edit")
+    public String edit(@AuthenticationPrincipal UserDetails userDetails,
                        @RequestParam String name,
                        @RequestParam(required = false) String description,
                        @RequestParam String phone,
@@ -116,8 +115,8 @@ public class ProviderController {
         }
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow();
-        ServiceProvider provider = serviceProviderService.getById(id);
-        if (provider == null || !provider.getUser().getId().equals(user.getId())) {
+        ServiceProvider provider = serviceProviderService.findByUser(user);
+        if (provider == null) {
             return "redirect:/provider";
         }
         Category category = categoryRepository.findById(categoryId).orElseThrow();
@@ -130,16 +129,15 @@ public class ProviderController {
         return "redirect:/provider";
     }
 
-    @PostMapping("/delete/{id}")
-    public String delete(@PathVariable Long id,
-                         @AuthenticationPrincipal UserDetails userDetails) {
+    @PostMapping("/delete")
+    public String delete(@AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
             return "redirect:/login";
         }
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow();
-        ServiceProvider provider = serviceProviderService.getById(id);
-        if (provider != null && provider.getUser().getId().equals(user.getId())) {
+        ServiceProvider provider = serviceProviderService.findByUser(user);
+        if (provider != null) {
             serviceProviderService.delete(provider);
         }
         return "redirect:/provider";
