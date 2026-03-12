@@ -1,5 +1,5 @@
 package com.pronajdiusluga.app.config;
-
+//bravoooo
 import lombok.RequiredArgsConstructor;
 import com.pronajdiusluga.app.model.*;
 import com.pronajdiusluga.app.repository.*;
