@@ -25,7 +25,7 @@ public class PageController {
             Model model
     ) {
         model.addAttribute("providers", serviceProviderService.search(city, category, q));
-        model.addAttribute("cities", cityRepository.findAll());
+        model.addAttribute("cities", cityRepository.findAllByOrderByNameAsc());
         model.addAttribute("categories", categoryRepository.findAll());
 
         model.addAttribute("city", city);

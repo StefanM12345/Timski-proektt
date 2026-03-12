@@ -2,110 +2,76 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Креирај го твојот оглас</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Креирај оглас – НајдиУслуга</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        body{
-            margin:0;
-            font-family: Arial, sans-serif;
-            height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            background: linear-gradient(-45deg,#4facfe,#00f2fe,#43e97b,#38f9d7);
-            background-size:400% 400%;
-            animation: gradientBG 10s ease infinite;
-        }
-        @keyframes gradientBG{
-            0%{background-position:0% 50%;}
-            50%{background-position:100% 50%;}
-            100%{background-position:0% 50%;}
-        }
-        .container{
-            background:white;
-            padding:30px;
-            border-radius:15px;
-            width:420px;
-            box-shadow:0 15px 40px rgba(0,0,0,0.25);
-        }
-        h2{
-            margin-top:0;
-            text-align:center;
-        }
-        .field{
-            margin-bottom:10px;
-            display:flex;
-            flex-direction:column;
-        }
-        label{
-            font-size:13px;
-            margin-bottom:4px;
-        }
-        input,select{
-            padding:8px;
-            border-radius:6px;
-            border:1px solid #ccc;
-            font-size:14px;
-        }
-        button{
-            margin-top:8px;
-            padding:10px;
-            border:none;
-            border-radius:8px;
-            background:#4facfe;
-            color:white;
-            font-size:15px;
-            cursor:pointer;
-        }
-        a.link{
-            margin-left:10px;
-            color:#4facfe;
-            text-decoration:none;
-        }
+        :root { --primary: #4facfe; --gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8fafc; min-height: 100vh; }
+        .form-card { border: none; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .form-control, .form-select { border-radius: 10px; border: 1px solid #e2e8f0; padding: 0.6rem 1rem; }
+        .form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,172,254,0.2); }
+        .btn-save { background: var(--gradient); border: none; color: white; font-weight: 600; padding: 0.6rem 1.5rem; border-radius: 10px; }
+        .btn-save:hover { opacity: 0.95; color: white; }
+        .btn-cancel { color: #64748b; text-decoration: none; }
+        .btn-cancel:hover { color: var(--primary); }
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>Креирај го твојот оглас</h2>
 
-    <form th:action="@{/provider/create}" method="post">
-        <div class="field">
-            <label>Име на бизнис / услуга</label>
-            <input type="text" name="name" required/>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-6">
+            <div class="card form-card">
+                <div class="card-header bg-transparent border-bottom py-3">
+                    <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Креирај го твојот оглас</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form th:action="@{/provider/create}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">Име на бизнис / услуга</label>
+                            <input type="text" name="name" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">Опис</label>
+                            <input type="text" name="description" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">Телефон</label>
+                            <input type="text" name="phone" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">Адреса</label>
+                            <input type="text" name="address" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">Град</label>
+                            <select name="cityId" class="form-select" required>
+                                <option value="">-- Одбери град --</option>
+                                <option th:each="c : ${cities}" th:value="${c.id}" th:text="${c.name}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-medium">Категорија</label>
+                            <select name="categoryId" class="form-select" required>
+                                <option value="">-- Одбери категорија --</option>
+                                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                            </select>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button type="submit" class="btn btn-save">
+                                <i class="bi bi-check-lg me-1"></i>Зачувај оглас
+                            </button>
+                            <a th:href="@{/provider}" class="btn btn-outline-secondary btn-cancel">Откажи</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="field">
-            <label>Опис</label>
-            <input type="text" name="description"/>
-        </div>
-        <div class="field">
-            <label>Телефон</label>
-            <input type="text" name="phone" required/>
-        </div>
-        <div class="field">
-            <label>Адреса</label>
-            <input type="text" name="address" required/>
-        </div>
-        <div class="field">
-            <label>Град</label>
-            <select name="cityId" required>
-                <option value="">-- Одбери град --</option>
-                <option th:each="c : ${cities}"
-                        th:value="${c.id}"
-                        th:text="${c.name}"></option>
-            </select>
-        </div>
-        <div class="field">
-            <label>Категорија</label>
-            <select name="categoryId" required>
-                <option value="">-- Одбери категорија --</option>
-                <option th:each="cat : ${categories}"
-                        th:value="${cat.id}"
-                        th:text="${cat.name}"></option>
-            </select>
-        </div>
-        <button type="submit">Зачувај оглас</button>
-        <a th:href="@{/provider}" class="link">Откажи</a>
-    </form>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
